@@ -7,6 +7,44 @@
 
 ---
 
+## Code Intelligence with Codegraph MCP
+
+Codegraph maintains an indexed knowledge graph of symbols, edges, and files in the workspace (stored in `.codegraph/`). Consult it **before** writing or editing code to understand architecture, symbol relationships, and blast radius.
+
+### 1. Tool Selection by Intent
+
+| Intent / Question | Recommended Tool | Description |
+|---|---|---|
+| *"What's the deal with this task / component / feature?"* | `codegraph_context` | **Primary tool**: Composes search, node info, callers, and callees in a single call. |
+| *"How does X reach or trigger Y?"* | `codegraph_trace` | Traces full execution flow (including dynamic dispatch, callbacks, and React re-renders). |
+| *"Where is symbol X defined?"* | `codegraph_search` | Fast symbol name lookup returning kind, location, and signature. |
+| *"Show me this symbol's source code / docstring"* | `codegraph_node` | Reads source code and metadata for a specific symbol. |
+| *"Survey several related symbols or a module"* | `codegraph_explore` | Returns source of related symbols grouped by file in one capped call. |
+| *"What calls / uses this symbol?"* | `codegraph_callers` | Finds all incoming call sites / usages. |
+| *"What does this symbol call / invoke?"* | `codegraph_callees` | Finds all outgoing function calls and component renders. |
+| *"What would changing this break?"* | `codegraph_impact` | Calculates blast radius and affected downstream dependencies. |
+| *"What files exist in a directory?"* | `codegraph_files` | Lists indexed files and structures in the workspace. |
+| *"Is the index ready?"* | `codegraph_status` | Inspects indexing status, symbol count, and database size. |
+
+### 2. Recommended Workflows
+
+- **Feature Exploration & Onboarding**:
+  - Start with `codegraph_context(query: "<component or hook name>")`.
+  - Use `codegraph_explore` if wider context is needed across related symbols.
+  - Avoid grep loops; let Codegraph provide the structural map directly.
+- **Tracing User Action to State Change**:
+  - Run `codegraph_trace(from_symbol: "<handler>", to_symbol: "<reducer or state updater>")` to see the full path in one call.
+- **Refactoring & Safe Modifications**:
+  - Run `codegraph_impact(symbol: "<target>")` to verify all components and callers that will be affected by a signature or behavior change.
+
+### 3. Best Practices & Anti-patterns
+
+- **Don't grep first** when searching for known symbols or types — `codegraph_search` or `codegraph_context` is faster and context-rich.
+- **Don't loop `codegraph_node`** across many symbols — use `codegraph_explore` to inspect multiple related symbols in one call.
+- **Index synchronization**: The file watcher needs ~500ms to debounce and re-index after file writes; wait for the next turn before querying freshly modified symbols.
+
+---
+
 ## Testing with Playwright MCP
 
 When verifying the frontend application (Vite dev server at `http://localhost:5173` or target URL), use the Playwright MCP tools to perform automated functional testing and UI validation.
