@@ -13,4 +13,10 @@ export interface DialogConfig {
   title: string;
   message: string;
   onConfirm: () => void;
+  onCancel?: () => void;
+}
+
+export interface NotificationInfo {
+  id: number;
+  message: string;
 }

@@ -5,10 +5,16 @@ import './CartItem.css';
 interface CartItemProps {
   item: CartItemType;
   onUpdateQuantity: (productId: number, change: number) => void;
+  onSetQuantity: (productId: number, quantity: number) => void;
   onRemove: (productId: number) => void;
 }
 
-export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
+export function CartItem({
+  item,
+  onUpdateQuantity,
+  onSetQuantity,
+  onRemove,
+}: CartItemProps) {
   return (
     <div className="cart-item">
       <div className="cart-item-image">📷</div>
@@ -19,14 +25,16 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
         </div>
         <QuantityControls
           quantity={item.quantity}
-          onIncrease={() => onUpdateQuantity(item.product.id, 1)}
-          onDecrease={() => onUpdateQuantity(item.product.id, -1)}
+          onIncrease={(step) => onUpdateQuantity(item.product.id, step)}
+          onDecrease={(step) => onUpdateQuantity(item.product.id, -step)}
+          onSetQuantity={(val) => onSetQuantity(item.product.id, val)}
         />
       </div>
       <button
         className="cart-item-remove"
         onClick={() => onRemove(item.product.id)}
         aria-label="移除商品"
+        title="移除商品"
       >
         ✕
       </button>

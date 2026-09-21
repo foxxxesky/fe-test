@@ -1,4 +1,3 @@
-import { useDeferredValue } from 'react';
 import './SearchBox.css';
 
 interface SearchBoxProps {
@@ -7,9 +6,6 @@ interface SearchBoxProps {
 }
 
 export function SearchBox({ value, onChange }: SearchBoxProps) {
-  const deferred = useDeferredValue(value);
-  void deferred;
-
   return (
     <input
       className="search-box"
@@ -17,6 +13,7 @@ export function SearchBox({ value, onChange }: SearchBoxProps) {
       placeholder="搜尋商品..."
       value={value}
       onChange={(e) => onChange(e.target.value)}
+      aria-label="搜尋商品"
     />
   );
 }
