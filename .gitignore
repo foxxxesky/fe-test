@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+fe-test/node_modules/
+
+# Production build outputs
+dist/
+dist-ssr/
+fe-test/dist/
+fe-test/dist-ssr/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# System & Tooling artifacts
+.DS_Store
+.codegraph/
+.commandcode/
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.local
